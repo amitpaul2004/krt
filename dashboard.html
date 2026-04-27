@@ -606,14 +606,14 @@
 
                 // Render Syllabus
                 contentTarget.innerHTML = syllabus.map(item => `
-                    <div class="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm relative overflow-hidden group hover:border-indigo-300 transition-all">
-                        <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-indigo-500"></div>
-                        <div class="flex justify-between items-start mb-2">
-                            <p class="text-[10px] font-black text-indigo-600 uppercase tracking-widest">WEEK ${item.week}</p>
-                            <i class="bi bi-stars text-indigo-300 group-hover:rotate-12 transition-transform"></i>
+                    <div class="bg-white rounded-lg p-3 border border-slate-100 shadow-sm relative overflow-hidden group hover:border-indigo-300 transition-all">
+                        <div class="absolute left-0 top-0 bottom-0 w-0.5 bg-indigo-500"></div>
+                        <div class="flex justify-between items-start mb-0.5">
+                            <p class="text-[8px] font-black text-indigo-600 uppercase tracking-[0.2em]">WEEK ${item.week}</p>
+                            <i class="bi bi-stars text-indigo-300 group-hover:rotate-12 transition-transform text-[10px]"></i>
                         </div>
-                        <h4 class="font-black text-slate-800 text-sm mb-2">${item.title}</h4>
-                        <p class="text-xs text-slate-500 leading-relaxed font-medium">${item.desc}</p>
+                        <h4 class="font-black text-slate-800 text-xs mb-0.5 leading-tight">${item.title}</h4>
+                        <p class="text-[10px] text-slate-500 leading-snug font-medium line-clamp-2">${item.desc}</p>
                     </div>
                 `).join('');
 
