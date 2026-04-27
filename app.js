@@ -1,6 +1,32 @@
 document.addEventListener('DOMContentLoaded', async () => {
     
-    const API_URL = 'http://localhost:5000/api';
+    const API_URL = window.location.origin === 'http://127.0.0.1:5500' || window.location.origin === 'http://localhost:5500' 
+        ? 'http://localhost:5000/api' 
+        : '/api';
+    
+    // --- Scroll Reveal Animation Engine ---
+    const revealCallback = (entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    };
+
+    const revealObserver = new IntersectionObserver(revealCallback, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    const initReveal = () => {
+        const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
+        revealElements.forEach(el => revealObserver.observe(el));
+    };
+    initReveal();
+
+    // Re-run for dynamic content
+    const mObserver = new MutationObserver(() => initReveal());
+    mObserver.observe(document.body, { childList: true, subtree: true });
     
     // Get logged in user from localStorage
     const getAuthUser = () => {
@@ -107,18 +133,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             video.currentTime = 0;
         }
     };
-
-    // --- Scroll Animations (Reveal) ---
-    const revealElements = document.querySelectorAll('.reveal, .reveal-left, .reveal-right, .reveal-scale');
-    const revealObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('active');
-            }
-        });
-    }, { threshold: 0.1, rootMargin: "0px 0px -50px 0px" });
-
-    revealElements.forEach(el => revealObserver.observe(el));
 
     // --- 3D Hover Effect ---
     const heroCard = document.querySelector('.hero-3d-card');
@@ -238,69 +252,125 @@ document.addEventListener('DOMContentLoaded', async () => {
             if(document.getElementById('dash-cgpa')) document.getElementById('dash-cgpa').textContent = data.cgpa || 'N/A';
             if(document.getElementById('dash-branch')) document.getElementById('dash-branch').textContent = data.branch || 'N/A';
 
-            // Skill Gap Logic
-            const userSkills = ((data.techSkills || '') + ',' + (data.tools || '')).toLowerCase().split(',').map(s => s.trim()).filter(s => s);
-            let requiredSkills = ['javascript', 'python', 'sql', 'dsa', 'git'];
-            if (data.interests) {
-                if (data.interests.includes('AI/ML')) requiredSkills.push('machine learning', 'tensorflow');
-                if (data.interests.includes('Web Dev')) requiredSkills.push('react', 'node.js');
-            }
-            requiredSkills = [...new Set(requiredSkills)];
-            const skillsHave = requiredSkills.filter(req => userSkills.some(u => u.includes(req)));
-            const skillsMissing = requiredSkills.filter(req => !userSkills.some(u => u.includes(req)));
+            // --- Dynamic Skill Gap Engine ---
+            const updateSkillGap = (aiCompanies) => {
+                const userSkills = ((data.techSkills || '') + ',' + (data.tools || '')).toLowerCase().split(',').map(s => s.trim()).filter(s => s);
+                
+                // Extract unique skills required by top matched companies
+                let requiredSkills = [];
+                if (aiCompanies && aiCompanies.length > 0) {
+                    requiredSkills = [...new Set(aiCompanies.flatMap(c => c.stack))].map(s => s.toLowerCase());
+                } else {
+                    requiredSkills = ['javascript', 'python', 'sql', 'dsa', 'git', 'react', 'node.js'];
+                }
 
-            if (document.getElementById('skills-have')) {
-                document.getElementById('skills-have').innerHTML = skillsHave.map(s => `<span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold border border-emerald-100">${s}</span>`).join('');
-            }
-            if (document.getElementById('skills-missing')) {
-                document.getElementById('skills-missing').innerHTML = skillsMissing.map(s => `<span class="px-3 py-1 bg-rose-50 text-rose-700 rounded-lg text-sm font-bold border border-rose-100">${s}</span>`).join('');
-            }
+                const skillsHave = requiredSkills.filter(req => userSkills.some(u => u.includes(req)));
+                const skillsMissing = requiredSkills.filter(req => !userSkills.some(u => u.includes(req)));
+
+                const haveContainer = document.getElementById('skills-have');
+                const missingContainer = document.getElementById('skills-missing');
+
+                if (haveContainer) {
+                    haveContainer.innerHTML = skillsHave.length > 0 
+                        ? skillsHave.map(s => `<span class="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-lg text-sm font-bold border border-emerald-100 uppercase tracking-tighter">${s}</span>`).join('')
+                        : `<span class="text-xs text-slate-400 italic">No matches found yet</span>`;
+                }
+                if (missingContainer) {
+                    missingContainer.innerHTML = skillsMissing.length > 0
+                        ? skillsMissing.map(s => `<span class="px-3 py-1 bg-rose-50 text-rose-700 rounded-lg text-sm font-bold border border-rose-100 uppercase tracking-tighter">${s}</span>`).join('')
+                        : `<span class="text-xs text-emerald-600 font-bold">You are fully qualified!</span>`;
+                }
+            };
 
             // --- Real AI Analysis Integration ---
             const fetchAIAnalysis = async () => {
+                const companyContainer = document.getElementById('company-matches-container');
+                const mmContainer = document.getElementById('mindmap-container');
+                
+                // Show Loading HUD
+                const showLoading = (id, msg) => {
+                    const el = document.getElementById(id);
+                    if(el) el.innerHTML = `
+                        <div class="col-span-full py-20 text-center animate-pulse">
+                            <div class="inline-block w-16 h-16 border-4 border-indigo-500 border-t-transparent rounded-full mb-6 animate-spin"></div>
+                            <h3 class="text-xl font-black text-slate-400">${msg}</h3>
+                            <p class="text-xs font-bold text-slate-300 mt-2 uppercase tracking-widest">Quantum Engine Processing...</p>
+                        </div>
+                    `;
+                };
+
+                showLoading('company-matches-container', 'Syncing Company Intelligence');
+                showLoading('mindmap-container', 'Generating Trajectory Roadmap');
+
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 20000); // 20s timeout
+
                 try {
+                    console.log('--- AI Analysis Requesting ---');
                     const response = await fetch(`${API_URL}/ai/analyze`, {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ userData: data })
+                        body: JSON.stringify({ userData: data }),
+                        signal: controller.signal
                     });
-                    if (!response.ok) throw new Error('API Error');
+                    clearTimeout(timeoutId);
+                    
+                    if (!response.ok) throw new Error('Backend Sync Failed');
                     const aiData = await response.json();
+                    console.log('AI Analysis Response:', aiData);
+
+                    // Update Skill Gap dynamically
+                    updateSkillGap(aiData.companies);
                     
                     // Render Companies
-                    const companyContainer = document.getElementById('company-matches-container');
-                    if(companyContainer && aiData.companies) {
-                        companyContainer.innerHTML = aiData.companies.map((c, i) => `
-                            <div class="bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 shadow-lg shadow-slate-200/50 hover-lift relative overflow-hidden group reveal-scale" style="animation-delay: ${i * 0.1}s">
-                                <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                                <div class="relative z-10">
-                                    <div class="flex items-center justify-between mb-6">
-                                        <div class="flex items-center gap-4">
-                                            <div class="w-16 h-16 bg-gradient-to-br from-indigo-100 to-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-white group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                                                <i class="bi ${c.icon || 'bi-building'}"></i>
+                    if(companyContainer) {
+                        if (aiData.companies && aiData.companies.length > 0) {
+                            companyContainer.innerHTML = aiData.companies.map((c, i) => `
+                                <div class="bg-white/80 backdrop-blur-xl p-8 rounded-[2rem] border border-white/60 shadow-lg shadow-slate-200/50 hover-lift relative overflow-hidden group reveal-scale" style="animation-delay: ${i * 0.1}s">
+                                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                                    <div class="relative z-10">
+                                        <div class="flex items-center justify-between mb-6">
+                                            <div class="flex items-center gap-4">
+                                                <div class="w-16 h-16 bg-gradient-to-br from-indigo-100 to-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-white group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
+                                                    <i class="bi ${c.icon || 'bi-building'}"></i>
+                                                </div>
+                                                <div>
+                                                    <h3 class="font-black text-2xl text-slate-800">${c.name}</h3>
+                                                    <p class="text-sm font-bold text-slate-400">${c.role}</p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h3 class="font-black text-2xl text-slate-800">${c.name}</h3>
-                                                <p class="text-sm font-bold text-slate-400">${c.role}</p>
-                                            </div>
+                                            <span class="bg-emerald-100 text-emerald-700 text-lg font-black px-4 py-1.5 rounded-full border border-emerald-200 shadow-sm flex items-center gap-2">
+                                                <i class="bi bi-fire text-orange-500"></i> ${c.score}%
+                                            </span>
                                         </div>
-                                        <span class="bg-emerald-100 text-emerald-700 text-lg font-black px-4 py-1.5 rounded-full border border-emerald-200 shadow-sm flex items-center gap-2">
-                                            <i class="bi bi-fire text-orange-500"></i> ${c.score}%
-                                        </span>
-                                    </div>
-                                    <div class="mt-6">
-                                        <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Required Tech Stack</p>
-                                        <div class="flex flex-wrap gap-2">
-                                            ${c.stack.map(s => `<span class="text-xs font-bold bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shadow-sm">${s}</span>`).join('')}
+                                        <div class="mt-6">
+                                            <p class="text-xs font-black text-slate-400 uppercase tracking-widest mb-3">Required Tech Stack</p>
+                                            <div class="flex flex-wrap gap-2">
+                                                ${c.stack.map(s => `<span class="text-xs font-bold bg-white border border-slate-200 text-slate-600 px-3 py-1.5 rounded-lg shadow-sm">${s}</span>`).join('')}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        `).join('');
+                            `).join('');
+                        } else {
+                            companyContainer.innerHTML = `
+                                <div class="col-span-full py-16 text-center">
+                                    <div class="bg-slate-50 text-slate-600 p-10 rounded-[3rem] border border-slate-200 max-w-2xl mx-auto shadow-sm">
+                                        <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center mx-auto mb-6 shadow-md">
+                                            <i class="bi bi-shield-lock-fill text-3xl text-indigo-500"></i>
+                                        </div>
+                                        <h3 class="text-2xl font-black mb-3 text-slate-800">Intelligence Blocked</h3>
+                                        <p class="text-sm font-bold text-slate-400 mb-8 max-w-md mx-auto leading-relaxed">Our AI is ready to find your matches, but your profile lacks the <b>Technical Arsenal</b> and <b>Stream</b> data required for a precise search.</p>
+                                        <button onclick="document.querySelector('[data-tab=\'profile\']').click()" class="px-10 py-4 bg-indigo-600 text-white rounded-2xl font-black text-sm shadow-xl shadow-indigo-100 hover:scale-105 active:scale-95 transition-all">
+                                            Initialize Your Profile
+                                        </button>
+                                    </div>
+                                </div>
+                            `;
+                        }
                     }
 
                     // Render Mindmap
-                    const mmContainer = document.getElementById('mindmap-container');
                     if(mmContainer && aiData.mindmap) {
                         let mmHTML = `
                             <div class="flex items-center min-w-max px-4">
@@ -345,10 +415,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                         mmContainer.innerHTML = mmHTML;
                     }
                 } catch (e) { 
-                    console.error('AI Analysis Error:', e);
+                    console.error('AI Analysis Critical Error:', e);
                     showErrorState();
                 }
             };
+            fetchAIAnalysis();
             fetchAIAnalysis();
         } else {
             showErrorState();
@@ -383,6 +454,73 @@ document.addEventListener('DOMContentLoaded', async () => {
         ctaBtn.href = isLoggedIn ? "form.html" : "login.html";
         const ctaText = document.getElementById('cta-text');
         if(ctaText && isLoggedIn) ctaText.textContent = "Edit My Profile";
+    }
+
+    const gatherFormData = () => {
+        const interests = Array.from(document.querySelectorAll('input[name="interests"]:checked')).map(cb => cb.value);
+        return {
+            name: document.getElementById('name')?.value || '',
+            cgpa: document.getElementById('cgpa')?.value || '',
+            branch: document.getElementById('branch')?.value || '',
+            year: document.getElementById('year')?.value || '',
+            techSkills: document.getElementById('tech-skills')?.value || '',
+            tools: document.getElementById('tools')?.value || '',
+            interests: interests
+        };
+    };
+
+    // --- Form Save Progress Logic ---
+    const saveBtn = document.getElementById('save-btn');
+    if (saveBtn && studentForm) {
+        saveBtn.addEventListener('click', async (e) => {
+            const originalHTML = saveBtn.innerHTML;
+            const originalClasses = saveBtn.className;
+            
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `
+                <span class="flex items-center gap-3">
+                    <i class="bi bi-gear-fill animate-spin text-indigo-500"></i>
+                    <span class="animate-pulse tracking-widest text-[10px] font-black">DNA SYNCING...</span>
+                </span>
+            `;
+            saveBtn.className = "px-8 py-4 rounded-xl font-black text-indigo-600 bg-indigo-50 border border-indigo-200 transition-all flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.2)]";
+
+            try {
+                const formData = gatherFormData();
+                const response = await fetch(`${API_URL}/profile/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ ...formData, userId: authUser.id })
+                });
+
+                if (response.ok) {
+                    // Show Success on Button
+                    saveBtn.innerHTML = `
+                        <span class="flex items-center gap-2">
+                            <i class="bi bi-check-circle-fill text-emerald-500 animate-[bounce_0.5s_ease-in-out]"></i>
+                            <span class="text-emerald-600">SYNC SUCCESSFUL</span>
+                        </span>
+                    `;
+                    saveBtn.className = "px-8 py-4 rounded-xl font-black text-emerald-600 bg-emerald-50 border border-emerald-200 transition-all flex items-center justify-center shadow-[0_0_20px_rgba(16,185,129,0.2)] scale-105";
+                    
+                    setTimeout(() => {
+                        saveBtn.disabled = false;
+                        saveBtn.innerHTML = originalHTML;
+                        saveBtn.className = originalClasses;
+                    }, 2500);
+                } else {
+                    throw new Error('Sync Failed');
+                }
+            } catch (err) {
+                saveBtn.innerHTML = `<i class="bi bi-exclamin-triangle-fill mr-2"></i> RETRY`;
+                saveBtn.className = "px-8 py-4 rounded-xl font-black text-rose-600 bg-rose-50 border border-rose-200 transition-all flex items-center justify-center";
+                setTimeout(() => {
+                    saveBtn.disabled = false;
+                    saveBtn.innerHTML = originalHTML;
+                    saveBtn.className = originalClasses;
+                }, 3000);
+            }
+        });
     }
 
     // --- Form Submission Logic ---
@@ -483,6 +621,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             }, 700);
         }, 2800);
     };
+    // --- Dashboard Logout Activation ---
+    const dashLogoutBtn = document.getElementById('dash-logout-btn');
+    if (dashLogoutBtn) {
+        dashLogoutBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            performLogout();
+        });
+    }
+
     handleAuthSubmit('login-form');
     handleAuthSubmit('signup-form', true);
 

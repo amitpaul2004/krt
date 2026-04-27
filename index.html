@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assests/image.png">
     <style>
         html {
             scroll-behavior: smooth;
@@ -48,6 +49,78 @@
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 selection:bg-indigo-500 selection:text-white">
+    <!-- Neural Preloader Overlay -->
+    <div id="neural-preloader" class="fixed inset-0 z-[10000] flex flex-col items-center justify-center bg-slate-900 overflow-hidden transition-all duration-1000">
+        <!-- Floating Particles Background -->
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute top-[20%] left-[10%] w-[40rem] h-[40rem] bg-indigo-500 rounded-full blur-[120px] animate-pulse"></div>
+            <div class="absolute bottom-[20%] right-[10%] w-[30rem] h-[30rem] bg-sky-500 rounded-full blur-[120px] animate-pulse [animation-delay:2s]"></div>
+        </div>
+
+        <div class="relative z-10 text-center">
+            <!-- Animated Icon -->
+            <div class="mb-8 relative inline-block">
+                <div class="absolute inset-0 bg-indigo-500/20 rounded-full animate-ping scale-150"></div>
+                <div class="w-24 h-24 bg-gradient-to-br from-indigo-500 to-sky-400 rounded-3xl flex items-center justify-center text-4xl text-white shadow-[0_0_50px_rgba(79,70,229,0.5)] animate-bounce">
+                    <i class="bi bi-rocket-takeoff-fill"></i>
+                </div>
+            </div>
+
+            <!-- Initialization Text -->
+            <h2 class="text-white text-3xl font-black tracking-widest uppercase mb-4 animate-pulse">
+                SkillSprint <span class="text-indigo-400">v2.0</span>
+            </h2>
+            
+            <div class="flex items-center gap-4 max-w-xs mx-auto mb-6">
+                <div class="h-[2px] flex-1 bg-white/10 rounded-full overflow-hidden">
+                    <div id="preloader-bar" class="h-full bg-gradient-to-r from-indigo-500 to-sky-400 w-0 transition-all duration-500 ease-out"></div>
+                </div>
+                <span id="preloader-percent" class="text-indigo-300 font-mono text-sm">00%</span>
+            </div>
+
+            <div id="preloader-status" class="text-white/40 text-[10px] font-black uppercase tracking-[0.2em] h-4">INITIALIZING NEURAL ENGINE...</div>
+        </div>
+
+        <!-- Scanline Effect -->
+        <div class="absolute inset-0 bg-scanline pointer-events-none opacity-10"></div>
+    </div>
+
+    <script>
+        // Preloader Logic
+        window.addEventListener('load', () => {
+            const bar = document.getElementById('preloader-bar');
+            const percent = document.getElementById('preloader-percent');
+            const status = document.getElementById('preloader-status');
+            const preloader = document.getElementById('neural-preloader');
+            
+            const messages = [
+                "CALIBRATING SKILL DNA...",
+                "MAPPING CAREER NODES...",
+                "OPTIMIZING NEURAL PATHS...",
+                "SYNCING INDUSTRY REALM...",
+                "SYSTEMS READY"
+            ];
+
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    
+                    setTimeout(() => {
+                        preloader.classList.add('opacity-0', 'scale-110', 'pointer-events-none');
+                        setTimeout(() => preloader.remove(), 1000);
+                    }, 500);
+                }
+                
+                bar.style.width = `${progress}%`;
+                percent.innerText = `${Math.floor(progress).toString().padStart(2, '0')}%`;
+                status.innerText = messages[Math.floor((progress/101) * messages.length)];
+            }, 150);
+        });
+    </script>
+
     <div id="scroll-progress"></div>
     <div id="particle-container" class="fixed inset-0 pointer-events-none z-0"></div>
 

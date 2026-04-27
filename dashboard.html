@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/png" href="assests/image.png">
+    <link rel="icon" type="image/png" href="favicon.png">
     <style>
         .animate-gradient {
             background-size: 200% 200%;
@@ -260,10 +262,15 @@
             
             <!-- Recommended Companies -->
             <section class="reveal-scale">
-                <h2 class="text-3xl font-black mb-6 flex items-center gap-3 text-slate-800 title-underline">
-                    <div class="bg-gradient-to-br from-sky-400 to-blue-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-sky-200 hover:rotate-12 transition-transform duration-300"><i class="bi bi-building"></i></div>
-                    Top Company Matches
-                </h2>
+                <div class="flex items-center justify-between mb-10">
+                    <h2 class="text-4xl font-black text-slate-800 flex items-center gap-4">
+                        <div class="bg-gradient-to-br from-sky-400 to-blue-600 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-sky-200 hover:rotate-12 transition-transform duration-300"><i class="bi bi-building"></i></div>
+                        <span class="title-underline">Top Company Matches</span>
+                    </h2>
+                    <button onclick="window.location.reload()" class="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-bold text-slate-500 hover:text-indigo-600 hover:border-indigo-200 hover:bg-indigo-50/50 transition-all shadow-sm">
+                        <i class="bi bi-arrow-clockwise"></i> Force Sync
+                    </button>
+                </div>
                 <div id="company-matches-container" class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     <!-- Dynamic Company Cards will be injected here -->
                     <div class="col-span-full py-20 text-center">
@@ -275,9 +282,9 @@
 
             <!-- Skill Gap Analysis -->
             <section class="reveal-scale delay-100">
-                <h2 class="text-3xl font-black mb-6 flex items-center gap-3 text-slate-800 title-underline">
+                <h2 class="text-3xl font-black mb-6 flex items-center gap-3 text-slate-800">
                     <div class="bg-gradient-to-br from-purple-500 to-indigo-500 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-purple-200 hover:-rotate-12 transition-transform duration-300"><i class="bi bi-pie-chart-fill"></i></div>
-                    Skill Gap Analysis
+                    <span class="title-underline">Skill Gap Analysis</span>
                 </h2>
                 <div class="glass-card bg-white/80 backdrop-blur-2xl rounded-[2.5rem] border border-white/60 shadow-xl shadow-slate-200/50 p-8 md:p-12 hover-lift relative overflow-hidden group">
                     
@@ -318,9 +325,9 @@
 
             <!-- Interactive Mindmap Trajectory -->
             <section class="reveal-scale delay-200">
-                <h2 class="text-3xl font-black mb-6 flex items-center gap-3 text-slate-800 title-underline">
+                <h2 class="text-3xl font-black mb-6 flex items-center gap-3 text-slate-800">
                     <div class="bg-gradient-to-br from-emerald-400 to-teal-500 text-white w-12 h-12 rounded-xl flex items-center justify-center text-xl shadow-lg shadow-emerald-200 hover:rotate-180 transition-transform duration-700"><i class="bi bi-diagram-3-fill"></i></div>
-                    Trajectory Mindmap
+                    <span class="title-underline">Trajectory Mindmap</span>
                 </h2>
                 
                 <div class="w-full glass-card bg-white/80 backdrop-blur-2xl rounded-[2.5rem] border border-white/60 shadow-xl shadow-slate-200/50 p-8 md:p-12 relative overflow-hidden flex flex-col">
@@ -656,5 +663,6 @@
             }
         }
     </script>
+    <script src="app.js"></script>
 </body>
 </html>
