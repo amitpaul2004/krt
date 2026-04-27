@@ -235,7 +235,7 @@ app.post('/api/ai/analyze', async (req, res) => {
 });
 
 // --- Final Catch-all for Frontend ---
-app.get('(.*)', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
