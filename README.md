@@ -1,47 +1,140 @@
-converting into app 
+# 🚀 SkillSprint v2.0
+
+> A Premium Full-Stack Placement Preparation Platform powered by **Hybrid Intelligence** (Google Gemini API & Local Reasoning Engine) packaged for Web, Android, and iOS.
 
 ---
 
+## 🌟 Key Features
 
+### 🎬 Cinematic UI & Immersive Experience
+* **Neural Preloader Overlay**: Animated loading screen featuring dynamic messages simulating AI calibration.
+* **3D Mouse Parallax & Hover Tilt**: Tech node elements on the landing page and the dashboard welcome banner rotate and pivot in 3D perspective based on cursor coordinates.
+* **Particle Physics Engine**: Custom lightweight javascript particles floating in the background, automatically disabled on mobile screens for battery savings.
+* **Premium Glassmorphic Aesthetics**: Curated dark and light theme tokens, blur backdrops, and gradient boundaries powered by Tailwind CSS and custom keyframe animations.
 
-# SkillSprint v2.0 - Full-Stack Implementation
+### 🧠 Hybrid AI Reasoning Engine
+* **Multilayer Fallback Strategy**: 
+  1. Tries **Gemini 1.5 Flash** for rapid text generation.
+  2. Falls back to **Gemini Pro** / **Gemini 1.5 Pro** if limits are hit or models fail.
+  3. Seamlessly defaults to a **Local Company DB Engine** if offline or API keys are missing.
+* **Prompt Injection Resilience**: Dynamic local parsing converts unstructured AI outputs securely into JSON data arrays.
 
-SkillSprint is now a full-stack platform with a Node.js backend and MongoDB database integration. Follow these steps to get everything running.
+### 📊 Placement Analytics Dashboard
+* **Compatibility Scoring**: Automatically matches student CGPA, branch, and technical skillsets to target parameters at top companies (Google, Microsoft, Amazon, Adobe, TCS, Infosys, Netflix, Meta).
+* **Visual Skill Gap Analysis**: Maps student credentials against company stacks. Displays qualifying skills in **Emerald Pills** and critical missing skills in **Rose Pills**.
+* **Interactive Mindmap Roadmap**: A dynamic tree diagram with nodes that can be expanded or collapsed to detail stages of development.
+* **AI Syllabus Generator**: Creates a personalized week-by-week curriculum based on missing profile skills, downloadable as a text file report.
 
-## 🚀 Getting Started
+---
 
-### 1. Install Dependencies
-Ensure you have Node.js installed. Open your terminal in the project directory (`d:\krt`) and run:
+## 📂 Project Architecture
+
+```
+d:\krt\
+├── server.js                 # Express.js server (REST APIs, Static serving, AI Engine)
+├── models/                   # Mongoose DB Schemas
+│   ├── User.js               # Users (username, email, password hashing)
+│   └── Profile.js            # Profiles (skills, CGPA, target disciplines, metrics)
+│
+├── www/                      # ⭐ Combined Web & Mobile Assets (Primary Frontend)
+│   ├── index.html            # Landing / Marketing Page
+│   ├── login.html            # User login
+│   ├── signup.html           # User registration
+│   ├── form.html             # Skill DNA profile config
+│   ├── dashboard.html        # Interactive AI placement dashboard
+│   ├── app.js                # Core frontend client (API sync, animations, logic)
+│   ├── style.css             # Main styling, tokens, keyframes
+│   ├── mobile.css            # Mobile platform safety overrides (notches, safe areas)
+│   └── assests/              # Video demonstrations & image assets
+│
+├── android/                  # Native Android Studio Project (Capacitor)
+├── ios/                      # Native Xcode Project (Capacitor)
+└── capacitor.config.json     # Capacitor configuration
+```
+
+---
+
+## ⚡ Quick Start
+
+### Prerequisites
+* [Node.js](https://nodejs.org/) installed (v18+ recommended)
+* [MongoDB](https://www.mongodb.com/) (Local server or MongoDB Atlas Cluster)
+
+### 1. Clone & Install Dependencies
 ```bash
 npm install
 ```
-*(Note: I have already initialized the package.json with express, mongoose, cors, bcryptjs, and jsonwebtoken.)*
 
-### 2. Start the Backend Server
-The server handles your authentication and database storage.
+### 2. Configure Environment Variables
+Create a `.env` file in the root directory:
+```env
+MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/skillsprint
+API_KEY=your_google_gemini_api_key_here
+PORT=5000
+```
+
+### 3. Start Backend Server
 ```bash
 node server.js
 ```
-You should see: `✅ MongoDB Connected` and `🚀 Server running on port 5000`.
+*You should see output indicating MongoDB is connected successfully.*
 
-### 3. Launch the Application
-Simply open `index.html` in your browser (via Live Server or just double-clicking the file).
+### 4. Run the Frontend
+Since `server.js` serves the static assets:
+* Open `http://localhost:5000` in your web browser.
+
+---
+
+## 📱 Mobile App Development (Capacitor)
+
+SkillSprint utilizes **Capacitor** to deploy the `www/` codebase natively onto mobile platforms.
+
+### Android Setup
+1. Ensure Android Studio and the Android SDK are installed.
+2. Open the project inside Android Studio:
+   ```bash
+   npx cap open android
+   ```
+3. Run on an emulator or a physical device connected via USB.
+
+> [!TIP]
+> **Local API Resolution**: While testing on the Android emulator, `www/app.js` is pre-configured to automatically map all `/api` endpoints to `http://10.0.2.2:5000`, which correctly routes traffic to your computer's local Express server.
+
+### iOS Setup (Mac only)
+1. Ensure Xcode is installed.
+2. Open the project inside Xcode:
+   ```bash
+   npx cap open ios
+   ```
+3. Choose a device simulator and press **Run**.
+
+### Syncing Code Changes
+If you modify any files in the `www/` folder, synchronize the changes to the Android & iOS project folders before compiling:
+```bash
+npx cap sync
+```
 
 ---
 
-## 🛠️ How to Use
+## 🛠️ Complete User Journey Flow
 
-1.  **Sign Up:** Go to the landing page and click "Sign Up". Create a new account. Your details are now stored in **MongoDB**.
-2.  **Configure Profile:** After signing up, you will be taken to the **Profile Form**. Fill in your CGPA, Branch, Skills, and Interests. Click "Launch Dashboard".
-3.  **Explore Dashboard:** View your personalized skill gaps and trajectory mindmap. 
-4.  **AI Detailed Plan:** Click "AI Detailed Plan" on the dashboard. The system will analyze your real skills from the database and generate a custom 6-week roadmap using Gemini 1.5.
-5.  **Persistence:** You can now log out and log back in. Your profile and progress will be waiting for you!
+```mermaid
+flowchart TD
+    A[Welcome Preloader] --> B[SignUp / Login]
+    B -->|Bcrypt Hashing & JWT Issued| C[Profile Form Setup]
+    C -->|Academic Metrics & Skills Saved| D[Placement Dashboard]
+    D --> E{AI Matching Engine Runs}
+    E --> F[Display Matches & Skill Gaps]
+    E --> G[Generate Dynamic Mindmap]
+    D --> H[Click AI Detailed Plan]
+    H --> I[Gemini Compiles 6-Week Custom Syllabus]
+    I --> J[Download Plan as Text Report]
+```
 
-## 📂 Project Structure
-- `server.js`: The Express backend logic.
-- `models/`: MongoDB database schemas (User & Profile).
-- `app.js`: Frontend logic updated for API integration.
-- `.env`: Contains your MongoDB connection string and Gemini API Key.
+1. **Academic Setup**: Input metrics (CGPA, Discipline, Technical arsenal, and areas of passion).
+2. **Review Skill Gaps**: Compare what you know against targeted MAANG or startup requirements.
+3. **Execute Learning Roadmap**: Check off tasks dynamically inside your timeline tree structure.
+4. **Generate AI Syllabus**: Prompt Gemini to output study milestones, view details in-app, and save the resulting roadmap configuration report.
 
 ---
-**Build for the future of placement. - SkillSprint Team**
+**Designed with passion. — The SkillSprint Team**
