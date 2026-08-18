@@ -1,140 +1,385 @@
-# 🚀 SkillSprint v2.0
+# 🚀 SkillSprint
 
-> A Premium Full-Stack Placement Preparation Platform powered by **Hybrid Intelligence** (Google Gemini API & Local Reasoning Engine) packaged for Web, Android, and iOS.
+> A futuristic AI-powered career and placement preparation platform that helps students understand their skill gaps, discover suitable target companies, and generate personalized learning roadmaps.
 
----
-
-## 🌟 Key Features
-
-### 🎬 Cinematic UI & Immersive Experience
-* **Neural Preloader Overlay**: Animated loading screen featuring dynamic messages simulating AI calibration.
-* **3D Mouse Parallax & Hover Tilt**: Tech node elements on the landing page and the dashboard welcome banner rotate and pivot in 3D perspective based on cursor coordinates.
-* **Particle Physics Engine**: Custom lightweight javascript particles floating in the background, automatically disabled on mobile screens for battery savings.
-* **Premium Glassmorphic Aesthetics**: Curated dark and light theme tokens, blur backdrops, and gradient boundaries powered by Tailwind CSS and custom keyframe animations.
-
-### 🧠 Hybrid AI Reasoning Engine
-* **Multilayer Fallback Strategy**: 
-  1. Tries **Gemini 1.5 Flash** for rapid text generation.
-  2. Falls back to **Gemini Pro** / **Gemini 1.5 Pro** if limits are hit or models fail.
-  3. Seamlessly defaults to a **Local Company DB Engine** if offline or API keys are missing.
-* **Prompt Injection Resilience**: Dynamic local parsing converts unstructured AI outputs securely into JSON data arrays.
-
-### 📊 Placement Analytics Dashboard
-* **Compatibility Scoring**: Automatically matches student CGPA, branch, and technical skillsets to target parameters at top companies (Google, Microsoft, Amazon, Adobe, TCS, Infosys, Netflix, Meta).
-* **Visual Skill Gap Analysis**: Maps student credentials against company stacks. Displays qualifying skills in **Emerald Pills** and critical missing skills in **Rose Pills**.
-* **Interactive Mindmap Roadmap**: A dynamic tree diagram with nodes that can be expanded or collapsed to detail stages of development.
-* **AI Syllabus Generator**: Creates a personalized week-by-week curriculum based on missing profile skills, downloadable as a text file report.
+[![Live Demo](https://img.shields.io/badge/Live-Demo-success?style=for-the-badge)](https://krt-mb45.onrender.com)
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=for-the-badge&logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?style=for-the-badge&logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ES6%2B-F7DF1E?style=for-the-badge&logo=javascript&logoColor=000)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 ---
 
-## 📂 Project Architecture
+## 📌 About the Project
 
-```
-d:\krt\
-├── server.js                 # Express.js server (REST APIs, Static serving, AI Engine)
-├── models/                   # Mongoose DB Schemas
-│   ├── User.js               # Users (username, email, password hashing)
-│   └── Profile.js            # Profiles (skills, CGPA, target disciplines, metrics)
+SkillSprint is a full-stack student career-preparation platform built around a **hybrid intelligence approach**.
+
+Students can create a profile containing their academic information, technical skills, tools, interests, and target roles. The platform then combines a **Google Gemini-powered analysis layer** with a **local rule-based fallback engine** to produce company recommendations, compatibility scores, skill-gap insights, and a staged preparation roadmap.
+
+The project uses a lightweight vanilla frontend and a Node.js/Express backend, with MongoDB and Mongoose for persistence.
+
+## ✨ Key Features
+
+- 🔐 **Authentication** – Signup/login flow with password hashing using `bcryptjs` and JWT-based authentication.
+- 👤 **Profile Management** – Store and update academic details, skills, tools, interests, and career targets.
+- 🤖 **Hybrid AI Analysis** – Uses Google Gemini for AI-generated career analysis, with a local reasoning fallback when the AI service is unavailable.
+- 🏢 **Company Matching** – Compares student skills and CGPA against a built-in company/role dataset.
+- 📊 **Skill Gap Analysis** – Highlights relevant skills and areas that need improvement.
+- 🧠 **Trajectory Mindmap** – Generates Foundation, Acceleration, and Final Push phases with actionable learning tasks.
+- 📚 **Personalized Syllabus** – Produces a structured preparation plan based on the student's target role and missing skills.
+- 🎨 **Modern UI** – Glassmorphism, responsive layouts, animations, hover effects, particles, parallax interactions, and theme-aware design.
+- 📱 **Mobile-ready architecture** – The project can be wrapped for Android/iOS using Capacitor when the native folders/configuration are added.
+- 🌐 **Single Express Server** – Backend APIs and static frontend files are served from the same Node.js application.
+
+---
+
+## 🧰 Technology Stack
+
+### Frontend
+
+| Technology | Usage |
+|---|---|
+| **HTML5** | Page structure and semantic markup |
+| **CSS3** | Custom styling, responsive layouts, animations and visual effects |
+| **JavaScript (ES6+)** | Frontend logic, API calls, DOM manipulation and interactive UI |
+| **Tailwind CSS CDN** | Utility-first UI styling used directly from the browser |
+| **Bootstrap Icons** | UI icons and visual indicators |
+| **Fetch API** | Communication with backend REST endpoints |
+| **Browser APIs** | Local interactions, animations, storage/download helpers and responsive behavior |
+
+### Backend
+
+| Technology | Usage |
+|---|---|
+| **Node.js** | JavaScript runtime for the server |
+| **Express.js** | REST API, middleware and static-file serving |
+| **Mongoose** | MongoDB object modeling and database access |
+| **MongoDB** | User and profile data persistence |
+| **bcryptjs** | Password hashing and credential verification |
+| **jsonwebtoken (JWT)** | Token generation for authentication |
+| **CORS** | Cross-origin request handling |
+| **dotenv** | Environment variable management |
+
+### AI & Logic
+
+| Technology / Technique | Usage |
+|---|---|
+| **Google Gemini API** | AI-powered student profile and career analysis |
+| **Prompt Engineering** | Structured prompts for company matching and roadmap generation |
+| **Hybrid Intelligence** | AI output + deterministic local fallback reasoning |
+| **Rule-based Scoring** | Skill/CGPA compatibility calculations in the local engine |
+| **JSON Parsing** | Converts AI responses into structured dashboard data |
+
+### Engineering Techniques
+
+- RESTful API design
+- MVC-style separation with Mongoose models
+- Async/await and promise-based server operations
+- Middleware-based request processing
+- Environment-based configuration
+- Responsive web design
+- Progressive enhancement for interactive UI
+- Client-side DOM event handling
+- Dynamic data rendering
+- Fallback/error-tolerant AI architecture
+- Static asset serving with Express
+
+---
+
+## 📂 Project Structure
+
+```text
+krt/
+├── index.html              # Landing page
+├── login.html              # Login page
+├── signup.html             # Registration page
+├── form.html               # Student profile/skill setup form
+├── dashboard.html          # AI placement dashboard
+├── app.js                  # Frontend interactions and API integration
+├── script.js               # Additional frontend logic
+├── style.css               # Custom styles and animations
 │
-├── www/                      # ⭐ Combined Web & Mobile Assets (Primary Frontend)
-│   ├── index.html            # Landing / Marketing Page
-│   ├── login.html            # User login
-│   ├── signup.html           # User registration
-│   ├── form.html             # Skill DNA profile config
-│   ├── dashboard.html        # Interactive AI placement dashboard
-│   ├── app.js                # Core frontend client (API sync, animations, logic)
-│   ├── style.css             # Main styling, tokens, keyframes
-│   ├── mobile.css            # Mobile platform safety overrides (notches, safe areas)
-│   └── assests/              # Video demonstrations & image assets
+├── server.js               # Express server, REST APIs and AI engine
 │
-├── android/                  # Native Android Studio Project (Capacitor)
-├── ios/                      # Native Xcode Project (Capacitor)
-└── capacitor.config.json     # Capacitor configuration
+├── models/
+│   ├── User.js             # User schema
+│   └── Profile.js          # Profile schema
+│
+├── assests/
+│   ├── image.png           # Project/favicon image
+│   └── Recording ...mp4    # Demo/media asset
+│
+├── package.json            # Dependencies and npm scripts
+├── package-lock.json       # Locked dependency versions
+└── README.md               # Project documentation
 ```
+
+> Note: The repository currently uses the `assests/` directory name exactly as committed. Do not change it to `assets/` unless you also update the references in the frontend.
 
 ---
 
-## ⚡ Quick Start
+## ⚙️ Prerequisites
 
-### Prerequisites
-* [Node.js](https://nodejs.org/) installed (v18+ recommended)
-* [MongoDB](https://www.mongodb.com/) (Local server or MongoDB Atlas Cluster)
+Before running the project locally, install:
 
-### 1. Clone & Install Dependencies
+- **Node.js 18+** – [Download Node.js](https://nodejs.org/)
+- **MongoDB** – either a local MongoDB server or a MongoDB Atlas cluster
+- A modern browser such as Chrome, Edge, Firefox, or Safari
+- A **Google Gemini API key** for AI-powered analysis
+
+---
+
+## 🚀 How to Start the Project
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/amitpaul2004/krt.git
+cd krt
+```
+
+### 2. Install dependencies
+
 ```bash
 npm install
 ```
 
-### 2. Configure Environment Variables
-Create a `.env` file in the root directory:
+The project uses the following main backend packages: `express`, `mongoose`, `bcryptjs`, `jsonwebtoken`, `cors`, and `dotenv`.
+
+### 3. Create the environment file
+
+Create a `.env` file in the project root:
+
 ```env
-MONGODB_URI=mongodb+srv://<username>:<password>@cluster0.mongodb.net/skillsprint
-API_KEY=your_google_gemini_api_key_here
+MONGODB_URI=mongodb+srv://<username>:<password>@<cluster>/<database>
+API_KEY=your_google_gemini_api_key
 PORT=5000
 ```
 
-### 3. Start Backend Server
+For local MongoDB, you can use a connection string similar to:
+
+```env
+MONGODB_URI=mongodb://127.0.0.1:27017/skillsprint
+```
+
+### 4. Start the application
+
+Using the npm script:
+
+```bash
+npm start
+```
+
+Or directly:
+
 ```bash
 node server.js
 ```
-*You should see output indicating MongoDB is connected successfully.*
 
-### 4. Run the Frontend
-Since `server.js` serves the static assets:
-* Open `http://localhost:5000` in your web browser.
+### 5. Open the application
+
+Visit:
+
+```text
+http://localhost:5000
+```
+
+Because Express serves the frontend files from the project root, you do **not** need a separate frontend server for normal local usage.
+
+### 6. Verify the backend
+
+When the server starts successfully, the terminal should show the server running on the configured port. If MongoDB is available, you should also see a successful MongoDB connection message.
 
 ---
 
-## 📱 Mobile App Development (Capacitor)
+## 🔑 Environment Variables
 
-SkillSprint utilizes **Capacitor** to deploy the `www/` codebase natively onto mobile platforms.
+| Variable | Required | Description |
+|---|---|---|
+| `MONGODB_URI` | Yes | MongoDB connection string |
+| `API_KEY` | Yes for Gemini | Google Gemini API key |
+| `PORT` | No | Server port; defaults to `5000` |
 
-### Android Setup
-1. Ensure Android Studio and the Android SDK are installed.
-2. Open the project inside Android Studio:
-   ```bash
-   npx cap open android
-   ```
-3. Run on an emulator or a physical device connected via USB.
+Never commit `.env` or API keys to GitHub.
 
-> [!TIP]
-> **Local API Resolution**: While testing on the Android emulator, `www/app.js` is pre-configured to automatically map all `/api` endpoints to `http://10.0.2.2:5000`, which correctly routes traffic to your computer's local Express server.
+---
 
-### iOS Setup (Mac only)
-1. Ensure Xcode is installed.
-2. Open the project inside Xcode:
-   ```bash
-   npx cap open ios
-   ```
-3. Choose a device simulator and press **Run**.
+## 🔌 Main API Endpoints
 
-### Syncing Code Changes
-If you modify any files in the `www/` folder, synchronize the changes to the Android & iOS project folders before compiling:
+### Authentication
+
+```text
+POST /api/auth/signup
+POST /api/auth/login
+```
+
+### Profile
+
+```text
+GET  /api/profile/:userId
+POST /api/profile
+POST /api/profile/save
+```
+
+### AI Analysis
+
+```text
+POST /api/ai/analyze
+```
+
+The AI endpoint accepts profile information such as technical skills, tools, CGPA, branch, and target interests, then returns structured company recommendations and a learning trajectory.
+
+---
+
+## 🧠 How the Hybrid AI Engine Works
+
+```text
+Student Profile
+      │
+      ▼
+Express API
+      │
+      ▼
+Gemini Prompt Builder
+      │
+      ├──────────────► Google Gemini API
+      │                      │
+      │                      ▼
+      │                Structured AI Output
+      │
+      └──────────────► Local Reasoning Engine
+                             │
+                             ▼
+                    Company + Skill Matching
+      │
+      ▼
+Dashboard Response
+```
+
+The backend first attempts AI-powered generation. If the external model is unavailable, returns unusable data, or fails to produce the expected JSON structure, the application falls back to its local company database and rule-based scoring logic.
+
+This makes the application more resilient than an AI-only workflow.
+
+---
+
+## 🔐 Security Techniques Used
+
+- Passwords are hashed before storage using `bcryptjs`.
+- JWT tokens are used for authentication responses.
+- Secrets are loaded through environment variables using `dotenv`.
+- Sensitive credentials should remain outside the source code.
+- API requests are handled through Express middleware and JSON payload validation logic.
+
+> For production use, move the JWT secret from the source code into an environment variable and add stronger authentication/authorization validation before exposing the system publicly.
+
+---
+
+## 🎨 UI & UX Techniques
+
+SkillSprint uses a visual style focused on a modern technology/career dashboard experience:
+
+- Glassmorphism and translucent panels
+- CSS gradients and animated borders
+- Scroll-based reveal animations
+- 3D cursor/parallax effects
+- Hover transformations and tilt interactions
+- Particle/background effects
+- Responsive layouts for desktop and mobile
+- Bootstrap Icons for consistent iconography
+- Tailwind CSS utilities for rapid interface styling
+- Custom CSS keyframe animations
+
+---
+
+## 🧪 Development Notes
+
+### Run locally
+
 ```bash
-npx cap sync
+npm install
+npm start
 ```
+
+### Frontend-only testing
+
+The frontend code contains logic for detecting a local `localhost:5500` development origin and redirecting API requests to `http://localhost:5000/api`. However, the recommended setup is to let Express serve the project so the application runs from a single origin:
+
+```text
+http://localhost:5000
+```
+
+### Database
+
+The application expects the MongoDB connection string in `MONGODB_URI`. If MongoDB is not reachable, database-backed features such as signup, login, and profile persistence will not work correctly.
 
 ---
 
-## 🛠️ Complete User Journey Flow
+## 🌍 Deployment
 
-```mermaid
-flowchart TD
-    A[Welcome Preloader] --> B[SignUp / Login]
-    B -->|Bcrypt Hashing & JWT Issued| C[Profile Form Setup]
-    C -->|Academic Metrics & Skills Saved| D[Placement Dashboard]
-    D --> E{AI Matching Engine Runs}
-    E --> F[Display Matches & Skill Gaps]
-    E --> G[Generate Dynamic Mindmap]
-    D --> H[Click AI Detailed Plan]
-    H --> I[Gemini Compiles 6-Week Custom Syllabus]
-    I --> J[Download Plan as Text Report]
+The repository is configured as a Node.js application and currently has a live deployment associated with:
+
+**Live:** https://krt-mb45.onrender.com
+
+For platforms such as Render, configure the environment variables from the **Environment** section and use:
+
+```bash
+npm start
 ```
 
-1. **Academic Setup**: Input metrics (CGPA, Discipline, Technical arsenal, and areas of passion).
-2. **Review Skill Gaps**: Compare what you know against targeted MAANG or startup requirements.
-3. **Execute Learning Roadmap**: Check off tasks dynamically inside your timeline tree structure.
-4. **Generate AI Syllabus**: Prompt Gemini to output study milestones, view details in-app, and save the resulting roadmap configuration report.
+Make sure the deployment environment provides a reachable MongoDB instance and a valid Gemini API key when AI analysis is required.
 
 ---
-**Designed with passion. — The SkillSprint Team**
+
+## 📈 Future Improvements
+
+- Refresh Gemini model names and API integration to match the latest Google AI SDK/API recommendations.
+- Move the JWT secret to `JWT_SECRET` in `.env`.
+- Add request validation with a schema library such as Zod/Joi.
+- Add automated tests for authentication, profile APIs, and AI fallback behavior.
+- Add rate limiting and stronger production security headers.
+- Add role-based access control and protected middleware for private routes.
+- Add a dedicated frontend build system such as Vite when the project grows.
+- Add CI/CD with GitHub Actions.
+- Add persistent learning progress and analytics history.
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository.
+2. Create a feature branch:
+
+```bash
+git checkout -b feature/your-feature
+```
+
+3. Commit your changes:
+
+```bash
+git add .
+git commit -m "feat: add your feature"
+```
+
+4. Push the branch:
+
+```bash
+git push origin feature/your-feature
+```
+
+5. Open a Pull Request on GitHub.
+
+---
+
+## 📄 License
+
+The repository currently does not declare an open-source license in `package.json` or the repository metadata. Add an explicit license file before distributing the project as open-source.
+
+---
+
+## 👨‍💻 Project
+
+**SkillSprint** — AI-powered placement preparation and career intelligence platform.
+
+Repository: https://github.com/amitpaul2004/krt
+
+Live Demo: https://krt-mb45.onrender.com
